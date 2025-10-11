@@ -1,4 +1,10 @@
 
+/*
+SNAKE
+A small snake game using the Max7219 display
+Written by Robert Jordan 
+*/
+
 //import libarries
 #include <MD_MAX72xx.h>
 #include <MD_Parola.h>
