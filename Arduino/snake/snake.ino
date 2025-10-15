@@ -118,14 +118,13 @@ void check_joystick(){
   } else if (yv < LOW_THRESHOLD && sn[0].dir != 3){
     //down
     sn[0].dir = 1;
-  } else if (xv < LOW_THRESHOLD && sn[0].dir != 0){
+  } else if (xv < LOW_THRESHOLD && sn[0].dir != 2){
     //left
-    sn[0].dir = 2;
-  } else if (xv > HIGH_THRESHOLD && sn[0].dir != 2){
-    //right
     sn[0].dir = 0;
+  } else if (xv > HIGH_THRESHOLD && sn[0].dir != 0){
+    //right
+    sn[0].dir = 2;
   }
-  delay(1);
 
   Serial.println(xv);
   Serial.println(yv);
@@ -274,17 +273,14 @@ void setup() {
 
 void loop() {
   ds.clear();
+  check_joystick();
   update_snake();
   update_apple();
 
   //speed up the game as the snake grows
   short int speed = START_SPEED - length*SPEED_INCREASE;
-  //constantly check the joystick between frames
-  for (int i = 0; i < 4; i++){
-    check_joystick();
-    delay(speed/4);
-  }
-  //delay(speed);
+
+  delay(speed);
 
   if (has_lost){
     lose();
