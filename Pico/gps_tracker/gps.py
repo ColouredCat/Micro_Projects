@@ -30,35 +30,38 @@ class GPS_Module:
         print(lines)
 
         #ignore data if timeout
-        if lines != None:
-            #convert to ascii
-            try:
-                lines = lines.decode('utf-8')
-            except UnicodeError:
-                #if decoding fails, no fix data 
-                return False
-            
-            lines = lines.replace('\n', ',')
-            lines = lines.split(',')
-            #look for $GPGGA sentance
-            if '$GPGGA' in lines:
-                #find position 
-                idx = lines.index('$GPGGA')
-                self.time = lines[idx+1]
-                
-                #if latitude is blank, there is no fix
-                if lines[idx+2] == '' or lines[idx+2][-1] == 'V':
-                    return False
-                
-                #convert lat and long to decimal degrees
-                self.lat, self.long = self.to_degrees(lines[idx+2], lines[idx+4])
-                if lines[idx+3] == 'S':
-                    self.lat = -self.lat
-                if lines[idx+5] == 'W':
-                    self.long = -self.long
-                
-                self.sat = lines[idx+7]
-                self.alt = lines[idx+9]
-                return True
+        if lines == None:
+            return False
         
-        return False
+        #convert to ascii
+        try:
+            lines = lines.decode('utf-8')
+        except UnicodeError:
+            #if decoding fails, no fix data 
+            return False
+        
+        lines = lines.replace('\n', ',')
+        lines = lines.split(',')
+
+        #look for $GPGGA sentance
+        if '$GPGGA' not in lines:
+            return False
+        
+        #find position 
+        idx = lines.index('$GPGGA')
+        self.time = lines[idx+1]
+        
+        #if latitude is blank, there is no fix
+        if lines[idx+2] == '' or lines[idx+2][-1] == 'V':
+            return False
+        
+        #convert lat and long to decimal degrees
+        self.lat, self.long = self.to_degrees(lines[idx+2], lines[idx+4])
+        if lines[idx+3] == 'S':
+            self.lat = -self.lat
+        if lines[idx+5] == 'W':
+            self.long = -self.long
+        
+        self.sat = lines[idx+7]
+        self.alt = lines[idx+9]
+        return True

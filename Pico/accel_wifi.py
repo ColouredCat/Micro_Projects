@@ -8,8 +8,8 @@ from machine import reset, Pin, I2C
 from math import sqrt
 
 # network details
-ssid = 'MARS_WiFi'
-password = 'BlakieTomasRoosa767'
+ssid = ''
+password = ''
 
 def open_network():
     # make connection to Wifi
